@@ -85,7 +85,6 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorAccent"
         android:id="@+id/fabBtnCreateNote"
-        android:tint="@color/ColorWhite"
         android:layout_marginEnd="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         app:layout_constraintBottom_toBottomOf="parent"
