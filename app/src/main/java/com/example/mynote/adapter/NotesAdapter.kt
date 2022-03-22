@@ -10,7 +10,10 @@ import com.example.mynote.entities.Notes
 import kotlinx.android.synthetic.main.item_rv_note.view.*
 
 
-class NotesAdapter(val arrList:List<Notes>):RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter():RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+
+    var arrList = ArrayList<Notes>()
+    var listener : OnItemClickListener? = null
     class NotesViewHolder(view: View):RecyclerView.ViewHolder(view) {
 
     }
@@ -19,6 +22,14 @@ class NotesAdapter(val arrList:List<Notes>):RecyclerView.Adapter<NotesAdapter.No
         return NotesViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_rv_note,parent,false)
         )
+    }
+
+    fun setData(arrNotesList: List<Notes>){
+        arrList = arrNotesList as ArrayList<Notes>
+    }
+
+    fun setOnClickListener(listener1:OnItemClickListener){
+        listener = listener1
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
@@ -38,9 +49,25 @@ class NotesAdapter(val arrList:List<Notes>):RecyclerView.Adapter<NotesAdapter.No
         }else{
             holder.itemView.imgNote.visibility = View.GONE
         }
+
+        if (arrList[position].webLink != null){
+            holder.itemView.tvWebLink.text = arrList[position].webLink
+            holder.itemView.tvWebLink.visibility = View.VISIBLE
+        }else{
+            holder.itemView.tvWebLink.visibility = View.GONE
+        }
+
+        holder.itemView.cardView.setOnClickListener{
+            listener!!.onClicked(arrList[position].id!!)
+        }
+
     }
 
     override fun getItemCount(): Int {
         return arrList.size
+    }
+
+    interface OnItemClickListener{
+         fun onClicked(notesId: Int)
     }
 }

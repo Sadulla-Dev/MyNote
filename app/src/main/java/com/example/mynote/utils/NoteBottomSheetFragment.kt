@@ -18,10 +18,12 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
     var selectedColor = "#171C26"
 
     companion object{
-        fun newInstance():NoteBottomSheetFragment{
+        var noteId = -1
+        fun newInstance(id:Int):NoteBottomSheetFragment{
             val args = Bundle()
             val fragment = NoteBottomSheetFragment()
             fragment.arguments = args
+            noteId = id
             return fragment
         }
     }
@@ -86,6 +88,12 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (noteId != -1){
+            layoutDeleteNote.visibility = View.VISIBLE
+        }else{
+            layoutDeleteNote.visibility = View.GONE
+
+        }
         setListener()
     }
 
@@ -190,19 +198,18 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
             LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
             dismiss()
         }
-//        layoutWebUrl.setOnClickListener{
-//            val intent = Intent("bottom_sheet_action")
-//            intent.putExtra("action","WebUrl")
-//            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
-//            dismiss()
-//        }
-//        layoutDeleteNote.setOnClickListener {
-//            val intent = Intent("bottom_sheet_action")
-//            intent.putExtra("action","DeleteNote")
-//            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
-//            dismiss()
-//        }
-//
+        layoutWebUrl.setOnClickListener{
+            val intent = Intent("bottom_sheet_action")
+            intent.putExtra("action","WebUrl")
+            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+            dismiss()
+        }
+        layoutDeleteNote.setOnClickListener {
+            val intent = Intent("bottom_sheet_action")
+            intent.putExtra("action","DeleteNote")
+            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+            dismiss()
+        }
 
 
 
