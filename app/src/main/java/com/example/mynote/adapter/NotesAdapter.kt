@@ -10,29 +10,30 @@ import com.example.mynote.entities.Notes
 import kotlinx.android.synthetic.main.item_rv_note.view.*
 
 
-class NotesAdapter():RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
-
+class NotesAdapter() :
+    RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+    var listener:OnItemClickListener? = null
     var arrList = ArrayList<Notes>()
-    var listener : OnItemClickListener? = null
-    class NotesViewHolder(view: View):RecyclerView.ViewHolder(view) {
-
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         return NotesViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_rv_note,parent,false)
         )
     }
 
+    override fun getItemCount(): Int {
+        return arrList.size
+    }
+
     fun setData(arrNotesList: List<Notes>){
         arrList = arrNotesList as ArrayList<Notes>
     }
 
-    fun setOnClickListener(listener1:OnItemClickListener){
+    fun setOnClickListener(listener1: OnItemClickListener){
         listener = listener1
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
+
         holder.itemView.tvTitle.text = arrList[position].title
         holder.itemView.tvDesc.text = arrList[position].noteText
         holder.itemView.tvDateTime.text = arrList[position].dateTime
@@ -50,24 +51,26 @@ class NotesAdapter():RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
             holder.itemView.imgNote.visibility = View.GONE
         }
 
-        if (arrList[position].webLink != null){
+        if (arrList[position].webLink != ""){
             holder.itemView.tvWebLink.text = arrList[position].webLink
             holder.itemView.tvWebLink.visibility = View.VISIBLE
         }else{
             holder.itemView.tvWebLink.visibility = View.GONE
         }
 
-        holder.itemView.cardView.setOnClickListener{
+        holder.itemView.cardView.setOnClickListener {
             listener!!.onClicked(arrList[position].id!!)
         }
 
     }
 
-    override fun getItemCount(): Int {
-        return arrList.size
+    class NotesViewHolder(view:View) : RecyclerView.ViewHolder(view){
+
     }
 
+
     interface OnItemClickListener{
-         fun onClicked(notesId: Int)
+        fun onClicked(noteId:Int)
     }
+
 }

@@ -15,12 +15,10 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class HomeFragment : BaseFragment() {
 
-    var notesAdapter: NotesAdapter = NotesAdapter()
     var arrNotes = ArrayList<Notes>()
-
+    var notesAdapter: NotesAdapter = NotesAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -32,11 +30,13 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
+
         return inflater.inflate(R.layout.fragment_home, container, false)
+
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance() =
             HomeFragment().apply {
@@ -67,7 +67,6 @@ class HomeFragment : BaseFragment() {
             replaceFragment(CreateNoteFragment.newInstance(),false)
         }
 
-
         search_view.setOnQueryTextListener( object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return true
@@ -90,11 +89,14 @@ class HomeFragment : BaseFragment() {
 
         })
 
+
     }
 
 
     private val onClicked = object :NotesAdapter.OnItemClickListener{
         override fun onClicked(notesId: Int) {
+
+
             var fragment :Fragment
             var bundle = Bundle()
             bundle.putInt("noteId",notesId)
@@ -105,6 +107,7 @@ class HomeFragment : BaseFragment() {
 
     }
 
+
     fun replaceFragment(fragment:Fragment, istransition:Boolean){
         val fragmentTransition = requireActivity().supportFragmentManager.beginTransaction()
 
@@ -113,5 +116,6 @@ class HomeFragment : BaseFragment() {
         }
         fragmentTransition.replace(R.id.frame_layout,fragment).addToBackStack(fragment.javaClass.simpleName).commit()
     }
+
 
 }

@@ -13,13 +13,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_notes_bottom_sheet.*
 
-class NoteBottomSheetFragment: BottomSheetDialogFragment() {
-
+class NoteBottomSheetFragment : BottomSheetDialogFragment() {
     var selectedColor = "#171C26"
 
-    companion object{
+
+    companion object {
         var noteId = -1
-        fun newInstance(id:Int):NoteBottomSheetFragment{
+        fun newInstance(id:Int): NoteBottomSheetFragment{
             val args = Bundle()
             val fragment = NoteBottomSheetFragment()
             fragment.arguments = args
@@ -29,13 +29,13 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
     }
     override fun setupDialog(dialog: Dialog, style: Int) {
         super.setupDialog(dialog, style)
+
         val view = LayoutInflater.from(context).inflate(R.layout.fragment_notes_bottom_sheet,null)
         dialog.setContentView(view)
 
         val param = (view.parent as View).layoutParams as CoordinatorLayout.LayoutParams
 
         val behavior = param.behavior
-
 
         if (behavior is BottomSheetBehavior<*>){
             behavior.setBottomSheetCallback(object  : BottomSheetBehavior.BottomSheetCallback(){
@@ -72,9 +72,6 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
 
 
         }
-
-
-
     }
 
     override fun onCreateView(
@@ -83,7 +80,7 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_notes_bottom_sheet,container,false)
-        
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,7 +89,6 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
             layoutDeleteNote.visibility = View.VISIBLE
         }else{
             layoutDeleteNote.visibility = View.GONE
-
         }
         setListener()
     }
@@ -215,5 +211,6 @@ class NoteBottomSheetFragment: BottomSheetDialogFragment() {
 
 
     }
+
 
 }
