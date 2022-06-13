@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
+    android:id="@+id/create_layout"
     tools:context=".HomeFragment">
 
 
@@ -16,15 +17,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_gravity="top"
             android:layout_marginTop="@dimen/_10sdp"
             android:orientation="vertical"
-            android:layout_gravity="top"
             tools:ignore="MissingConstraints">
 
             <ImageView
                 android:id="@+id/imgBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_back"
@@ -38,8 +39,8 @@
 
             <ImageView
                 android:id="@+id/imgDone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:src="@drawable/ic_tick"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,12 +52,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_marginBottom="@dimen/_40sdp"
+            android:orientation="vertical"
             tools:ignore="NotSibling">
 
             <LinearLayout
@@ -76,7 +76,7 @@
                         android:layout_margin="@dimen/_10sdp"
                         android:background="@null"
                         android:ellipsize="end"
-                        android:fontFamily="@font/manrope_bold"
+                        android:fontFamily="@font/solway_l"
                         android:hint="@string/notes_title"
                         android:inputType="text"
                         android:maxLines="1"
@@ -98,19 +98,19 @@
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:ellipsize="end"
-                        android:fontFamily="@font/manrope_bold"
+                        android:fontFamily="@font/solway_b"
                         android:maxLines="1"
                         android:paddingStart="@dimen/_10sdp"
                         android:textColor="@color/ColorGray"
                         android:textColorHint="@color/ColorGray"
-                        android:textSize="@dimen/_8ssp"/>
+                        android:textSize="@dimen/_8ssp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/l1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:ellipsize="end"
-                        android:fontFamily="@font/manrope_regular"
+                        android:fontFamily="@font/solway_l"
                         android:hint="@string/notes_sub_title"
                         android:inputType="text"
                         android:maxLines="1"
@@ -163,41 +163,42 @@
                         android:id="@+id/imgDelete"
                         android:layout_width="@dimen/_24sdp"
                         android:layout_height="@dimen/_24sdp"
-                        android:layout_marginEnd="@dimen/_15sdp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_alignParentEnd="true"
-                        android:visibility="gone"
                         android:layout_alignParentTop="true"
-                        android:src="@drawable/ic_delete" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
 
 
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/layoutWebUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/layoutWebUrl"
+                    android:layout_margin="@dimen/_10sdp"
                     android:background="@color/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="vertical"
                     android:padding="@dimen/_10sdp"
                     android:visibility="gone"
-                    android:layout_margin="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/layoutImage"
-                    android:orientation="vertical">
+                    app:layout_constraintTop_toBottomOf="@id/layoutImage">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="horizontal">
+
                         <EditText
                             android:id="@+id/etWebLink"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:fontFamily="@font/manrope_regular"
+                            android:fontFamily="@font/solway_l"
                             android:hint="@string/web_url"
                             android:inputType="textMultiLine"
                             android:padding="@dimen/_10sdp"
@@ -205,12 +206,13 @@
                             android:textColor="@color/ColorWhite"
                             android:textColorHint="@color/ColorGray"
                             android:textSize="@dimen/_12ssp" />
+
                         <ImageView
                             android:id="@+id/imgUrlDelete"
                             android:layout_width="@dimen/_24sdp"
                             android:layout_height="@dimen/_24sdp"
-                            android:visibility="gone"
-                            android:src="@drawable/ic_baseline_cancel_24" />
+                            android:src="@drawable/ic_baseline_cancel_24"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -223,27 +225,27 @@
 
 
                         <Button
+                            android:id="@+id/btnCancel"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_30sdp"
-                            android:fontFamily="@font/manrope_bold"
                             android:background="@color/colorAccent"
+                            android:fontFamily="@font/manrope_bold"
                             android:text="@string/cancel"
-                            android:textSize="@dimen/_12ssp"
                             android:textAllCaps="false"
                             android:textColor="@color/ColorWhite"
-                            android:id="@+id/btnCancel"/>
+                            android:textSize="@dimen/_12ssp" />
 
                         <Button
+                            android:id="@+id/btnOk"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_30sdp"
-                            android:fontFamily="@font/manrope_bold"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:background="@color/colorAccent"
+                            android:fontFamily="@font/manrope_bold"
                             android:text="@string/ok"
                             android:textAllCaps="false"
-                            android:textSize="@dimen/_12ssp"
-                            android:layout_marginStart="@dimen/_5sdp"
                             android:textColor="@color/ColorWhite"
-                            android:id="@+id/btnOk"/>
+                            android:textSize="@dimen/_12ssp" />
 
 
                     </LinearLayout>
@@ -262,34 +264,34 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
+                        android:autoLink="web"
                         android:ellipsize="end"
-                        android:visibility="gone"
                         android:fontFamily="@font/manrope_bold"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/ColorGray"
                         android:textColorHint="@color/ColorGray"
                         android:textSize="@dimen/_12ssp"
-                        android:autoLink="web"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/layoutWebUrl" />
 
-                    <EditText
+                    <com.yahiaangelo.markdownedittext.MarkdownEditText
                         android:id="@+id/etNoteDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="22sp"
                         android:background="@null"
-                        android:fontFamily="@font/manrope_regular"
+                        android:fontFamily="@font/solway_l"
                         android:hint="@string/notes_desc"
-                        android:inputType="textMultiLine"
+                        android:importantForAutofill="no"
+                        android:inputType="none"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/ColorWhite"
                         android:textColorHint="@color/ColorGray"
-                        android:textSize="@dimen/_12ssp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvWebLink" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -298,19 +300,64 @@
         </ScrollView>
     </LinearLayout>
 
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="bottom"
-        >
+        android:gravity="bottom">
 
-        <ImageView
-            android:id="@+id/imgMore"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
+        <FrameLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/img_bar" />
+            android:visibility="gone">
+
+            <com.yahiaangelo.markdownedittext.MarkdownStylesBar
+                android:id="@+id/style_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:elevation="5dp"
+                android:gravity="center"
+                android:padding="0dp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/change_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imgMore"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="@dimen/_10sdp"
+                android:backgroundTint="#161C27"
+                android:clickable="true"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/color_picker"
+                        android:tintMode="@color/colorPrimaryDark"
+                        tools:layout_editor_absoluteX="224dp"
+                        tools:layout_editor_absoluteY="618dp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
     </FrameLayout>
 
 

@@ -5,12 +5,14 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.navigation.fragment.navArgs
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +22,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.mynote.entities.Notes
 import com.example.mynote.utils.NoteBottomSheetFragment
 import com.example.mynote.database.NotesDatabase
+import com.example.mynote.utils.hideKeyboard
+import com.yahiaangelo.markdownedittext.MarkdownEditText
 import kotlinx.android.synthetic.main.fragment_create_note.*
+import kotlinx.android.synthetic.main.fragment_create_note.view.*
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -44,8 +49,6 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
 
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,6 +70,32 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
         super.onViewCreated(view, savedInstanceState)
 
 
+
+        create_layout.setOnClickListener {
+            layout.visibility = View.GONE
+            change_layout.visibility = View.VISIBLE
+        }
+        etNoteDesc.setOnClickListener {
+            layout.visibility = View.VISIBLE
+            change_layout.visibility = View.GONE
+        }
+        try {
+            etNoteDesc.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    layout.visibility = View.VISIBLE
+                    change_layout.visibility = View.GONE
+                    etNoteDesc.setStylesBar(style_button)
+                } else{
+                    layout.visibility = View.GONE
+                    change_layout.visibility = View.VISIBLE
+                }
+            }
+        }catch (e:Throwable){
+            Log.d("TAG", e.stackTraceToString())
+        }
+
+
+
         if (noteId != -1){
 
             launch {
@@ -75,7 +104,7 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
                     colorView.setBackgroundColor(Color.parseColor(notes.color))
                     etNoteTitle.setText(notes.title)
                     etNoteSubTitle.setText(notes.subTitle)
-                    etNoteDesc.setText(notes.noteText)
+                    etNoteDesc.renderMD(notes.noteText.toString())
                     if (notes.imgPath != ""){
                         selectedImagePath = notes.imgPath!!
                         imgNote.setImageBitmap(BitmapFactory.decodeFile(notes.imgPath))
@@ -117,8 +146,10 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
         imgDone.setOnClickListener {
             if (noteId != -1){
                 updateNote()
+                Toast.makeText(requireActivity(), "Notes Updated", Toast.LENGTH_SHORT).show()
             }else{
                 saveNote()
+                Toast.makeText(requireActivity(), "Notes Saved", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -128,7 +159,6 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
 
         imgMore.setOnClickListener{
 
-
             var noteBottomSheetFragment = NoteBottomSheetFragment.newInstance(noteId)
             noteBottomSheetFragment.show(requireActivity().supportFragmentManager,"Note Bottom Sheet Fragment")
         }
@@ -136,7 +166,6 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
         imgDelete.setOnClickListener {
             selectedImagePath = ""
             layoutImage.visibility = View.GONE
-
         }
 
         btnOk.setOnClickListener {
@@ -171,7 +200,6 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
 
     }
 
-
     private fun updateNote(){
         launch {
 
@@ -180,7 +208,7 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
 
                 notes.title = etNoteTitle.text.toString()
                 notes.subTitle = etNoteSubTitle.text.toString()
-                notes.noteText = etNoteDesc.text.toString()
+                notes.noteText = etNoteDesc.getMD()
                 notes.dateTime = currentDate
                 notes.color = selectedColor
                 notes.imgPath = selectedImagePath
@@ -189,7 +217,7 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
                 NotesDatabase.getDatabase(it).noteDao().updateNote(notes)
                 etNoteTitle.setText("")
                 etNoteSubTitle.setText("")
-                etNoteDesc.setText("")
+                etNoteDesc.getMD()
                 layoutImage.visibility = View.GONE
                 imgNote.visibility = View.GONE
                 tvWebLink.visibility = View.GONE
@@ -197,6 +225,7 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
             }
         }
     }
+
     private fun saveNote(){
 
         if (etNoteTitle.text.isNullOrEmpty()){
@@ -218,7 +247,7 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
                 var notes = Notes()
                 notes.title = etNoteTitle.text.toString()
                 notes.subTitle = etNoteSubTitle.text.toString()
-                notes.noteText = etNoteDesc.text.toString()
+                notes.noteText = etNoteDesc.getMD()
                 notes.dateTime = currentDate
                 notes.color = selectedColor
                 notes.imgPath = selectedImagePath
@@ -227,7 +256,7 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
                     NotesDatabase.getDatabase(it).noteDao().insertNotes(notes)
                     etNoteTitle.setText("")
                     etNoteSubTitle.setText("")
-                    etNoteDesc.setText("")
+                    etNoteDesc.getMD()
                     layoutImage.visibility = View.GONE
                     imgNote.visibility = View.GONE
                     tvWebLink.visibility = View.GONE
@@ -235,11 +264,9 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
                 }
             }
         }
-
     }
 
     private fun deleteNote(){
-
         launch {
             context?.let {
                 NotesDatabase.getDatabase(it).noteDao().deleteSpecificNote(noteId)
@@ -259,7 +286,6 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
             Toast.makeText(requireContext(),"Url is not valid",Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private val BroadcastReceiver : BroadcastReceiver = object :BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -321,37 +347,28 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
                     deleteNote()
                 }
 
-
                 else -> {
                     layoutImage.visibility = View.GONE
                     imgNote.visibility = View.GONE
                     layoutWebUrl.visibility = View.GONE
                     selectedColor = p1.getStringExtra("selectedColor")!!
                     colorView.setBackgroundColor(Color.parseColor(selectedColor))
-
                 }
             }
         }
-
     }
 
     override fun onDestroy() {
-
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(BroadcastReceiver)
         super.onDestroy()
-
-
     }
 
     private fun hasReadStoragePerm():Boolean{
         return EasyPermissions.hasPermissions(requireContext(),Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 
-
     private fun readStorageTask(){
         if (hasReadStoragePerm()){
-
-
             pickImageFromGallery()
         }else{
             EasyPermissions.requestPermissions(
@@ -407,18 +424,10 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
         }
     }
 
-
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,requireActivity())
     }
-
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         if (EasyPermissions.somePermissionPermanentlyDenied(requireActivity(),perms)){
@@ -427,15 +436,12 @@ class CreateNoteFragment : BaseFragment(),EasyPermissions.PermissionCallbacks,Ea
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-
     }
 
     override fun onRationaleDenied(requestCode: Int) {
-
     }
 
     override fun onRationaleAccepted(requestCode: Int) {
-
     }
 
 }

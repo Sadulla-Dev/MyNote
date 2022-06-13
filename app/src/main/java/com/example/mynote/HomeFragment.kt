@@ -1,6 +1,8 @@
 package com.example.mynote
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -58,6 +60,7 @@ class HomeFragment : BaseFragment() {
                 notesAdapter!!.setData(notes)
                 arrNotes = notes as ArrayList<Notes>
                 recycler_view.adapter = notesAdapter
+                updateUI(notes)
             }
         }
 
@@ -92,6 +95,15 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun updateUI(note: List<Notes>) {
+        if (note.isNotEmpty()) {
+            cardView.visibility = View.GONE
+            recycler_view.visibility = View.VISIBLE
+        } else {
+            cardView.visibility = View.VISIBLE
+            recycler_view.visibility = View.GONE
+        }
+    }
 
     private val onClicked = object :NotesAdapter.OnItemClickListener{
         override fun onClicked(notesId: Int) {

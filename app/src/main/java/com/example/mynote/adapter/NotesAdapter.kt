@@ -7,11 +7,33 @@ import android.view.ViewGroup
 import com.example.mynote.R
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mynote.entities.Notes
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonVisitor
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.ext.tasklist.TaskListPlugin
 import kotlinx.android.synthetic.main.item_rv_note.view.*
+import org.commonmark.node.SoftLineBreak
 
 
-class NotesAdapter() :
-    RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+class NotesAdapter() : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+
+    class NotesViewHolder(view:View) : RecyclerView.ViewHolder(view){
+        val markwon = Markwon.builder(view.context)
+            .usePlugin(StrikethroughPlugin.create())
+            .usePlugin(TaskListPlugin.create(view.context))
+            .usePlugin(object : AbstractMarkwonPlugin(){
+                override fun configureVisitor(builder: MarkwonVisitor.Builder) {
+                    super.configureVisitor(builder)
+                    builder.on(
+                        SoftLineBreak::class.java
+                    ){visitor , _-> visitor.forceNewLine()}
+                }
+            })
+            .build()
+    }
+
+
     var listener:OnItemClickListener? = null
     var arrList = ArrayList<Notes>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
@@ -34,8 +56,10 @@ class NotesAdapter() :
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
 
+        val note = arrList[position]
         holder.itemView.tvTitle.text = arrList[position].title
-        holder.itemView.tvDesc.text = arrList[position].noteText
+//        holder.itemView.tvDesc.text = arrList[position].noteText
+        holder.markwon.setMarkdown(holder.itemView.tvDesc,note.noteText.toString())
         holder.itemView.tvDateTime.text = arrList[position].dateTime
 
         if (arrList[position].color != null){
@@ -64,9 +88,6 @@ class NotesAdapter() :
 
     }
 
-    class NotesViewHolder(view:View) : RecyclerView.ViewHolder(view){
-
-    }
 
 
     interface OnItemClickListener{
